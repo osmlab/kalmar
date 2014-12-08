@@ -18,15 +18,15 @@ cd ../..
 # I know
 sudo chmod 777 --recursive /home/ubuntu/openstreetmap-website
 
-sudo su postgres
-cd /home/ubuntu/openstreetmap-website
-createuser -s admin
-bundle exec rake db:create
-psql -d openstreetmap -c "CREATE EXTENSION btree_gist"
-psql -d osm_test -c "CREATE EXTENSION btree_gist;"
-bundle exec rake db:migrate
-# open post 3000 on your instance
-# remember you're postgres user
+sudo -u postgres createuser -s admin
+sudo -u postgres bundle exec rake db:create
+sudo -u postgres psql -U postgres -d openstreetmap -c "CREATE EXTENSION btree_gist"
+sudo -u postgres psql -U postgres -d osm_test -c "CREATE EXTENSION btree_gist;"
+sudo -u postgres bundle exec rake db:migrate
 
-# to start the server: bundle exec rails server
+# I know
+sudo chmod 777 --recursive /home/ubuntu/openstreetmap-website
+
+# expose port 3000 on your instance
+# to start the server: sudo -u postgres bundle exec rails server
 # ready to go at localhost:3000/
