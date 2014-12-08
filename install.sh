@@ -1,5 +1,3 @@
-set -e -u
-
 sudo apt-get update
 sudo apt-get install -y git make ruby-full ruby imagemagick nodejs
 sudo apt-get install -y postgresql-9.3 postgresql-9.3-postgis-2.1 postgresql-contrib-9.3 postgresql-client-9.3 postgresql-common postgresql-client-common postgresql-plpython-9.3
@@ -18,9 +16,9 @@ sudo make libpgosm.so
 cd ../..
 
 # I know
-sudo chmod 777 /home/ubuntu/openstreetmap-website
+sudo chmod 777 --recursive /home/ubuntu/openstreetmap-website
 
-sudo -u postgres -i
+sudo su postgres
 cd /home/ubuntu/openstreetmap-website
 createuser -s admin
 bundle exec rake db:create
@@ -28,7 +26,7 @@ psql -d openstreetmap -c "CREATE EXTENSION btree_gist"
 psql -d osm_test -c "CREATE EXTENSION btree_gist;"
 bundle exec rake db:migrate
 # open post 3000 on your instance
-exit
+# remember you're postgres user
 
-# start the server: bundle exec rails server
+# to start the server: bundle exec rails server
 # ready to go at localhost:3000/
