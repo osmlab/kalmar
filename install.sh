@@ -7,29 +7,28 @@ sudo apt-get install -y zlib1g-dev libxml2-dev libpq-dev postgresql-server-dev-9
 sudo git clone --depth=1 https://github.com/openstreetmap/openstreetmap-website.git
 
 sudo gem install bundle
-cd openstreetmap-website
+cd /home/ubuntu/openstreetmap-website
 sudo bundle install
 
 sudo cp config/example.application.yml config/application.yml
 sudo cp config/example.database.yml config/database.yml
-
-sudo -u postgres -i
-createuser -s admin
-bundle exec rake db:create
-psql -d openstreetmap -c "CREATE EXTENSION btree_gist"
-psql -d osm_test -c "CREATE EXTENSION btree_gist;"
-exit
 
 cd db/functions
 sudo make libpgosm.so
 cd ../..
 
 # I know
-sudo chmod 777 /home/ubuntu
+sudo chmod 777 /home/ubuntu/openstreetmap-website
 
-sudo su postgres
+sudo -u postgres -i
+cd /home/ubuntu/openstreetmap-website
+createuser -s admin
+bundle exec rake db:create
+psql -d openstreetmap -c "CREATE EXTENSION btree_gist"
+psql -d osm_test -c "CREATE EXTENSION btree_gist;"
 bundle exec rake db:migrate
 # open post 3000 on your instance
-bundle exec rails server
-# BAM: localhost:3000/
-# might need to hit it a few times initially for things to cache
+exit
+
+# start the server: bundle exec rails server
+# ready to go at localhost:3000/
